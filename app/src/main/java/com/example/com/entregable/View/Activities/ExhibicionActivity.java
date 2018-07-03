@@ -12,14 +12,16 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.com.entregable.Model.POJO.Paint;
 import com.example.com.entregable.R;
+import com.example.com.entregable.View.Fragments.DetalleFragment;
 import com.example.com.entregable.View.Fragments.ExhibitionFragment;
 import com.facebook.AccessToken;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class ExhibicionActivity extends AppCompatActivity {
+public class ExhibicionActivity extends AppCompatActivity implements ExhibitionFragment.NotificadorExhibitionActivity {
 
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle actionBarDrawerToggle;
@@ -40,7 +42,6 @@ public class ExhibicionActivity extends AppCompatActivity {
     }
 
     private void navigationItemSelected(MenuItem item){
-        Toast.makeText(ExhibicionActivity.this, "click", Toast.LENGTH_SHORT).show();
         switch (item.getItemId()){
             case R.id.navmenuPaintings:
                 loadFragment(new ExhibitionFragment());
@@ -51,13 +52,11 @@ public class ExhibicionActivity extends AppCompatActivity {
         }
     }
 
-    private class NavigationListener implements NavigationView.OnNavigationItemSelectedListener{
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            navigationItemSelected(item);
-            return true;
-        }
+    @Override
+    public void notificar(Paint paint) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(DetalleFragment.PINTURA_KEY, paint);
+        loadFragment(new DetalleFragment(), bundle);
     }
 
     private void logout(){
@@ -80,10 +79,28 @@ public class ExhibicionActivity extends AppCompatActivity {
         transaction.commit();
     }
 
+    private void loadFragment(Fragment fragment, Bundle bundle){
+        FragmentManager manager = getSupportFragmentManager();
+        fragment.setArguments(bundle);
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(R.id.ae_fl_container, fragment);
+        transaction.commit();
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(actionBarDrawerToggle.onOptionsItemSelected(item))
             return true;
         return super.onOptionsItemSelected(item);
     }
+
+    private class NavigationListener implements NavigationView.OnNavigationItemSelectedListener{
+
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            navigationItemSelected(item);
+            return true;
+        }
+    }
+
 }

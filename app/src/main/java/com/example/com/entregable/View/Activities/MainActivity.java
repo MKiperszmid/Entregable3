@@ -41,19 +41,31 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String EMAIL = "email";
     private FirebaseAuth mAuth;
+    private String nombreSeccion = "Ingreso";
+
+    /*
+     * Mostramos cardview con nombre de pintura, pero no de Artista.
+     * Lo que sabemos de la Paint, es su foto, su nombre, y su ArtistId. (La foto, el path. Asique esto se aplica con Storage)
+     * Cuando clickeamos la foto, deberiamos hacer un artistController.grabArtists, que le pase el ID del artista (con un getArtistId en la Paint)
+     * Y cargar la informacion, basado en lo que obtenemos.
+     *
+     * Agarrar una lista de Artistas, en este entregable, no es necesario. Ya que no lo pide en ningun momento.
+     *
+     *
+     */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        userExists();
         setContentView(R.layout.activity_main);
-
         createAccount = findViewById(R.id.am_tv_crearCuenta);
         etEmail = findViewById(R.id.am_teet_emailTexto);
         etPass = findViewById(R.id.am_teet_passTexto);
         emailContainer = findViewById(R.id.am_til_emailContainer);
         passContainer = findViewById(R.id.am_til_passContainer);
         loginAccount = findViewById(R.id.am_tv_loginCuenta);
+
+        getSupportActionBar().setTitle(nombreSeccion);
 
         createAccount.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,6 +110,12 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "Hubo un problema al comunicarse con Facebook.", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        userExists();
     }
 
     private void iniciarExhibicion(){

@@ -17,20 +17,20 @@
        <TextView
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
-           tools:text="Artista:"
+           tools:text="Artista: "
            android:id="@+id/fd_tv_nombreArtista"
            style="@style/TextArtista"
            android:layout_marginTop="35dp"/>
        <TextView
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
-           tools:text="Nationality:"
+           tools:text="Nationality: "
            android:id="@+id/fd_tv_nationalityArtista"
            style="@style/TextArtista"/>
        <TextView
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
-           tools:text="Influenced by:"
+           tools:text="Influenced by: "
            android:id="@+id/fd_tv_influencedArtista"
            style="@style/TextArtista"/>
    </LinearLayout>

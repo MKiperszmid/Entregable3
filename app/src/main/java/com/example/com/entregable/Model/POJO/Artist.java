@@ -2,15 +2,19 @@ package com.example.com.entregable.Model.POJO;
 
 public class Artist {
     private String Influenced_by;
-    private String nationality;
-    private String name;
     private String artistId;
+    private String name;
+    private String nationality;
 
-    public Artist(String influenced_by, String artistId, String name, String nationality) {
-        Influenced_by = influenced_by;
+    public Artist(String Influenced_by, String nationality, String name, String artistId) {
+        this.Influenced_by = Influenced_by;
         this.artistId = artistId;
         this.name = name;
         this.nationality = nationality;
+    }
+
+    public Artist(){
+
     }
 
     public String getInfluenced_by() {
@@ -43,5 +47,15 @@ public class Artist {
 
     public void setNationality(String nationality) {
         this.nationality = nationality;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(!(obj instanceof Artist)) return false;
+        Artist artist = (Artist) obj;
+
+        return artist.getArtistId().equals(this.getArtistId())
+                && artist.getName().equals(this.getName())
+                && artist.getNationality().equals(this.getNationality());
     }
 }

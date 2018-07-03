@@ -1,10 +1,12 @@
 package com.example.com.entregable.Model.POJO;
 
+import java.io.Serializable;
+
 /**
  * Created by DH on 3/7/2018.
  */
 
-public class Paint {
+public class Paint implements Serializable {
     private String image;
     private String name;
     private Integer artistId;
