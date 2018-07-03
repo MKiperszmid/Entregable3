@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        card_view:cardUseCompatPadding="true"
+        card_view:cardElevation="5dp"
+        card_view:cardCornerRadius="10dp"
+        card_view:cardPreventCornerOverlap="false"
+        android:background="@color/colorWhite">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/michelangelo_eveandadam"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@color/colorWhite"
+            android:layout_gravity="center|bottom"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:text="padhgoiahdgiahdhgadg"
+            android:textColor="@color/colorBlack"
+            android:textStyle="bold"
+            android:gravity="center|bottom"
+            android:layout_margin="10dp"
+            android:textSize="18sp"
+            android:textAllCaps="true"
+            android:id="@+id/crp_tv_pinturaName"/>
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>
