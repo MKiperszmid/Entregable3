@@ -13,6 +13,8 @@ import com.example.com.entregable.Model.POJO.Paint;
 import com.example.com.entregable.Model.POJO.PaintContainer;
 import com.example.com.entregable.R;
 import com.example.com.entregable.View.Adapters.AdapterRecyclerPinturas;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class ExhibicionActivity extends AppCompatActivity implements AdapterRecyclerPinturas.NotificadorCeldaActivity {
 

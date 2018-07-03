@@ -2,9 +2,13 @@ package com.example.com.entregable.View.Activities;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.com.entregable.R;
@@ -29,6 +33,12 @@ public class MainActivity extends AppCompatActivity {
     private CallbackManager callbackManager;
     private Boolean isLoggedIn;
     private LoginButton loginButton;
+    private TextView createAccount;
+    private EditText etEmail;
+    private EditText etPass;
+    private TextInputLayout emailContainer;
+    private TextInputLayout passContainer;
+    private TextView loginAccount;
 
     private static final String EMAIL = "email";
     private FirebaseAuth mAuth;
@@ -45,6 +55,36 @@ public class MainActivity extends AppCompatActivity {
         if(isLoggedIn) {
             iniciarExhibicion();
         }
+
+        createAccount = findViewById(R.id.am_tv_crearCuenta);
+        etEmail = findViewById(R.id.am_teet_emailTexto);
+        etPass = findViewById(R.id.am_teet_passTexto);
+        emailContainer = findViewById(R.id.am_til_emailContainer);
+        passContainer = findViewById(R.id.am_til_passContainer);
+        loginAccount = findViewById(R.id.am_tv_loginCuenta);
+
+        createAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String email = etEmail.getText().toString();
+                String pass = etPass.getText().toString();
+                if(!email.contains("@")){
+                    emailContainer.setError("Falta un @ en email!");
+                    return;
+                }
+
+                createAccount(email, pass);
+            }
+        });
+
+        loginAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String email = etEmail.getText().toString();
+                String pass = etPass.getText().toString();
+                loginAccount(email, pass);
+            }
+        });
 
         callbackManager = CallbackManager.Factory.create();
         loginButton =  findViewById(R.id.login_button);
@@ -89,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
                             Log.w("CREATEACCOUNT", "createUserWithEmail:failure", task.getException());
                             Toast.makeText(MainActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, "Ex: " + task.getException(), Toast.LENGTH_SHORT).show();
                             //updateUI(null);
                         }
                         // ...
@@ -96,24 +137,25 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-    private void singInAccount(String email, String password){
+    private void loginAccount(String email, String password){
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            Log.d("SIGNIN", "signInWithEmail:success");
+                            Log.d("LOGIN", "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             //updateUI(user);
                             iniciarExhibicion();
                         } else {
                             // If sign in fails, display a message to the user.
-                            Log.w("SIGNIN", "signInWithEmail:failure", task.getException());
+                            Log.w("LOGIN", "signInWithEmail:failure", task.getException());
                             Toast.makeText(MainActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-                            //updateUI(null);
+                           // updateUI(null);
                         }
+
                         // ...
                     }
                 });
