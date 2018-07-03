@@ -6,91 +6,98 @@
     android:layout_height="match_parent"
     tools:context=".View.Activities.MainActivity"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorGray"
     android:orientation="vertical"
-    android:background="@color/colorGray">
+    android:id="@+id/am_ll_layout">
 
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        card_view:cardUseCompatPadding="true"
-        card_view:cardElevation="10dp"
-        card_view:cardCornerRadius="10dp"
-        card_view:cardPreventCornerOverlap="false">
-        <LinearLayout
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Bienvenido a MOMA!"
-                android:gravity="center"
-                android:textSize="30dp"
-                android:layout_marginTop="50dp"
-                android:layout_marginBottom="30dp"/>
-            <com.facebook.login.widget.LoginButton
-                android:id="@+id/login_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:layout_gravity="center" />
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/am_til_emailContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Email"
-                android:layout_margin="20dp">
-                <android.support.design.widget.TextInputEditText
-                    android:id="@+id/am_teet_emailTexto"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textEmailAddress"
-                    style="@style/MaterialEditText"/>
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/am_til_passContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Contraseña"
-                android:layout_margin="20dp">
-                <android.support.design.widget.TextInputEditText
-                    android:id="@+id/am_teet_passTexto"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textEmailAddress"
-                    style="@style/MaterialEditText"/>
-            </android.support.design.widget.TextInputLayout>
-
+            card_view:cardUseCompatPadding="true"
+            card_view:cardElevation="10dp"
+            card_view:cardCornerRadius="10dp"
+            card_view:cardPreventCornerOverlap="false">
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_gravity="center"
                 android:orientation="vertical">
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/am_tv_crearCuenta"
-                    android:padding="15dp"
-                    android:layout_gravity="center"
-                    android:text="Crear Cuenta"
-                    android:textStyle="bold"
-                    android:textSize="18dp"
-                    android:background="@color/colorVerdeAgua"/>
-                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/am_tv_loginCuenta"
+                    android:text="Bienvenido a MOMA!"
+                    android:textColor="@color/colorPrimary"
                     android:gravity="center"
-                    android:padding="15dp"
+                    android:textSize="30dp"
+                    android:layout_marginTop="20dp"/>
+                <com.facebook.login.widget.LoginButton
+                    android:id="@+id/login_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:layout_gravity="center" />
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/am_til_emailContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Email"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginLeft="20dp">
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/am_teet_emailTexto"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textEmailAddress"
+                        style="@style/MaterialEditText"/>
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/am_til_passContainer"
                     android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Contraseña"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginLeft="20dp">
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/am_teet_passTexto"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textEmailAddress"
+                        style="@style/MaterialEditText"/>
+                </android.support.design.widget.TextInputLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="Logear"
-                    android:textStyle="bold"
-                    android:textSize="18dp"
-                    android:background="@color/colorVerdeAgua"/>
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/am_tv_crearCuenta"
+                        style="@style/ButtonAccount"
+                        android:text="Crear"
+                        android:layout_margin="20dp"
+                        android:textStyle="bold"
+                        android:textSize="18dp"
+                        android:layout_alignParentStart="true"
+                        android:background="@color/colorPrimary"
+                        android:textColor="@color/colorWhite"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/am_tv_loginCuenta"
+                        android:layout_margin="20dp"
+                        style="@style/ButtonAccount"
+                        android:layout_alignParentEnd="true"
+                        android:text="Login"
+                        android:textStyle="bold"
+                        android:textSize="18dp"
+                        android:background="@color/colorPrimary"
+                        android:textColor="@color/colorWhite"/>
+                </RelativeLayout>
             </LinearLayout>
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
+        </android.support.v7.widget.CardView>
 
 </LinearLayout>

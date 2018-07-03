@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".View.Fragments.DetalleFragment">
+
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:orientation="vertical">
+       <ImageView
+           android:layout_width="match_parent"
+           android:layout_height="300dp"
+           android:src="@drawable/keithharing_dreaming"
+           android:scaleType="fitXY"/>
+       <TextView
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           tools:text="Artista:"
+           android:id="@+id/fd_tv_nombreArtista"
+           style="@style/TextArtista"
+           android:layout_marginTop="35dp"/>
+       <TextView
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           tools:text="Nationality:"
+           android:id="@+id/fd_tv_nationalityArtista"
+           style="@style/TextArtista"/>
+       <TextView
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           tools:text="Influenced by:"
+           android:id="@+id/fd_tv_influencedArtista"
+           style="@style/TextArtista"/>
+   </LinearLayout>
+
+</FrameLayout>

@@ -31,7 +31,6 @@ import java.util.Arrays;
 public class MainActivity extends AppCompatActivity {
 
     private CallbackManager callbackManager;
-    private Boolean isLoggedIn;
     private LoginButton loginButton;
     private TextView createAccount;
     private EditText etEmail;
@@ -46,15 +45,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        userExists();
         setContentView(R.layout.activity_main);
-        mAuth = FirebaseAuth.getInstance();
-        AccessToken accessToken = AccessToken.getCurrentAccessToken();
-        isLoggedIn = accessToken != null && !accessToken.isExpired();
-
-        //TODO: Cambiar a: if(isLoggedIn) , para que funcione detectando Facebook. Lo estoy dejando en if(! , para no iniciar sesion.
-        if(isLoggedIn) {
-            iniciarExhibicion();
-        }
 
         createAccount = findViewById(R.id.am_tv_crearCuenta);
         etEmail = findViewById(R.id.am_teet_emailTexto);
@@ -88,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
 
         callbackManager = CallbackManager.Factory.create();
         loginButton =  findViewById(R.id.login_button);
-        loginButton.setReadPermissions(Arrays.asList(EMAIL));
+        loginButton.setReadPermissions("email", "public_profile");
 
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -187,13 +179,15 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
+    private void userExists(){
+        mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
-            //updateUI(currentUser);
+            iniciarExhibicion();
+        }
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+
+        if(accessToken != null && !accessToken.isExpired()) {
             iniciarExhibicion();
         }
     }

@@ -1,48 +1,89 @@
 package com.example.com.entregable.View.Activities;
 
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.example.com.entregable.Controller.PaintController;
-import com.example.com.entregable.Controller.ResultListener;
-import com.example.com.entregable.Model.POJO.Paint;
-import com.example.com.entregable.Model.POJO.PaintContainer;
 import com.example.com.entregable.R;
-import com.example.com.entregable.View.Adapters.AdapterRecyclerPinturas;
+import com.example.com.entregable.View.Fragments.ExhibitionFragment;
+import com.facebook.AccessToken;
+import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class ExhibicionActivity extends AppCompatActivity implements AdapterRecyclerPinturas.NotificadorCeldaActivity {
+public class ExhibicionActivity extends AppCompatActivity {
 
-    private RecyclerView recyclerView;
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exhibicion);
-        recyclerView = findViewById(R.id.ae_rv_pinturas);
-        grabInfo();
+        drawerLayout = findViewById(R.id.ae_dl_layout);
+        navigationView = findViewById(R.id.ae_nv_navigation);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+        navigationView.setNavigationItemSelectedListener(new NavigationListener());
+        actionBarDrawerToggle.syncState();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        loadFragment(new ExhibitionFragment());
     }
 
-    private void grabInfo(){
-        PaintController controller = new PaintController();
-        controller.getPaints(new ResultListener<PaintContainer>() {
-            @Override
-            public void finish(PaintContainer result) {
-                AdapterRecyclerPinturas adapterRecyclerPinturas = new AdapterRecyclerPinturas(result.getPaints(), ExhibicionActivity.this);
-                recyclerView.setAdapter(adapterRecyclerPinturas);
-                recyclerView.setLayoutManager(new LinearLayoutManager(ExhibicionActivity.this, LinearLayoutManager.VERTICAL, false));
-                //recyclerView.setLayoutManager(new GridLayoutManager(ExhibicionActivity.this, 2, GridLayoutManager.VERTICAL, false));
-            }
-        });
+    private void navigationItemSelected(MenuItem item){
+        Toast.makeText(ExhibicionActivity.this, "click", Toast.LENGTH_SHORT).show();
+        switch (item.getItemId()){
+            case R.id.navmenuPaintings:
+                loadFragment(new ExhibitionFragment());
+                break;
+            case R.id.navmenuLogout:
+                logout();
+                break;
+        }
+    }
+
+    private class NavigationListener implements NavigationView.OnNavigationItemSelectedListener{
+
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            navigationItemSelected(item);
+            return true;
+        }
+    }
+
+    private void logout(){
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseUser user = auth.getCurrentUser();
+        if(user != null)
+            auth.signOut();
+
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        if(accessToken != null && !accessToken.isExpired()) {
+            LoginManager.getInstance().logOut();
+        }
+        onBackPressed();
+    }
+
+    private void loadFragment(Fragment fragment){
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(R.id.ae_fl_container, fragment);
+        transaction.commit();
     }
 
     @Override
-    public void notificarPintura(Paint paint) {
-        Toast.makeText(this, paint.getName(), Toast.LENGTH_SHORT).show();
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(actionBarDrawerToggle.onOptionsItemSelected(item))
+            return true;
+        return super.onOptionsItemSelected(item);
     }
 }

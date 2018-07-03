@@ -18,11 +18,11 @@ import java.util.List;
 
 public class AdapterRecyclerPinturas extends RecyclerView.Adapter {
     private List<Paint> paints;
-    private NotificadorCeldaActivity notificadorCeldaActivity;
+    private NotificadorCelda notificadorCelda;
 
-    public AdapterRecyclerPinturas(List<Paint> paints, NotificadorCeldaActivity notificadorCeldaActivity){
+    public AdapterRecyclerPinturas(List<Paint> paints, NotificadorCelda notificadorCelda){
         this.paints = paints;
-        this.notificadorCeldaActivity = notificadorCeldaActivity;
+        this.notificadorCelda = notificadorCelda;
     }
 
     @NonNull
@@ -54,7 +54,7 @@ public class AdapterRecyclerPinturas extends RecyclerView.Adapter {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    notificadorCeldaActivity.notificarPintura(paints.get(getAdapterPosition()));
+                    notificadorCelda.notificarPintura(paints.get(getAdapterPosition()));
                 }
             });
         }
@@ -64,7 +64,7 @@ public class AdapterRecyclerPinturas extends RecyclerView.Adapter {
         }
     }
 
-    public interface NotificadorCeldaActivity{
+    public interface NotificadorCelda {
         void notificarPintura(Paint paint);
     }
 }
