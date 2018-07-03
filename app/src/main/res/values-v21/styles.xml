@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="MaterialEditText" parent="AppTheme">
+        <item name="android:colorControlActivated">@color/colorVerdeAgua</item>
+    </style>
+</resources>

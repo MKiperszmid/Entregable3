@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            android:src="@drawable/michelangelo_eveandadam"/>
+            android:src="@drawable/keithharing_dreaming"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="40dp"
