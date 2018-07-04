@@ -9,7 +9,9 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.example.com.entregable.Model.POJO.Paint;
@@ -45,6 +47,7 @@ public class ExhibicionActivity extends AppCompatActivity implements ExhibitionF
         switch (item.getItemId()){
             case R.id.navmenuPaintings:
                 loadFragment(new ExhibitionFragment());
+                drawerLayout.closeDrawer(Gravity.LEFT);
                 break;
             case R.id.navmenuLogout:
                 logout();

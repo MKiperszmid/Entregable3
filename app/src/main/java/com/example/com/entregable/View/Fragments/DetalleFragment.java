@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.com.entregable.Controller.ArtistController;
@@ -13,6 +14,7 @@ import com.example.com.entregable.Controller.ResultListener;
 import com.example.com.entregable.Model.POJO.Artist;
 import com.example.com.entregable.Model.POJO.Paint;
 import com.example.com.entregable.R;
+import com.example.com.entregable.Util.Functionality;
 import com.example.com.entregable.View.Activities.ExhibicionActivity;
 
 /**
@@ -24,6 +26,7 @@ public class DetalleFragment extends Fragment {
     private TextView tvName;
     private TextView tvNationality;
     private TextView tvInfluenced;
+    private ProgressBar progressBar;
 
     public DetalleFragment() {
         // Required empty public constructor
@@ -35,6 +38,9 @@ public class DetalleFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_detalle, container, false);
+        progressBar = view.findViewById(R.id.fd_pb_progress);
+
+        Functionality.loadProgressbar(true, progressBar);
 
         Bundle bundle = getArguments();
 
@@ -43,8 +49,6 @@ public class DetalleFragment extends Fragment {
         ((ExhibicionActivity)getActivity()).getSupportActionBar().setTitle(paint.getName());
 
         grabInfoArtist(paint.getArtistId().toString(), view);
-
-
 
         return view;
     }
@@ -73,5 +77,6 @@ public class DetalleFragment extends Fragment {
         tvName.setText(name);
         tvNationality.setText(nationality);
         tvInfluenced.setText(influenced);
+        Functionality.loadProgressbar(false, progressBar);
     }
 }

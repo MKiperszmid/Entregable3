@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.support.v7.widget.RecyclerView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.com.entregable.Controller.ArtistController;
@@ -23,6 +24,7 @@ import com.example.com.entregable.Model.POJO.Paint;
 import com.example.com.entregable.Model.POJO.PaintContainer;
 import com.example.com.entregable.R;
 import com.example.com.entregable.Controller.PaintController;
+import com.example.com.entregable.Util.Functionality;
 import com.example.com.entregable.View.Activities.ExhibicionActivity;
 import com.example.com.entregable.View.Adapters.AdapterRecyclerPinturas;
 
@@ -37,6 +39,7 @@ public class ExhibitionFragment extends Fragment implements AdapterRecyclerPintu
     private List<Artist> artistList;
     private NotificadorExhibitionActivity notificadorExhibitionActivity;
     private String nombreSeccion = "Pinturas";
+    private ProgressBar progressBar;
 
     public ExhibitionFragment() {
         // Required empty public constructor
@@ -54,12 +57,13 @@ public class ExhibitionFragment extends Fragment implements AdapterRecyclerPintu
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_exhibition, container, false);
         recycler = view.findViewById(R.id.fe_rv_pinturas);
-
+        progressBar = view.findViewById(R.id.fe_pb_progress);
         grabInfo();
         return view;
     }
 
     private void grabInfo(){
+        Functionality.loadProgressbar(true, progressBar);
         PaintController controller = new PaintController();
 
         controller.getPaints(new ResultListener<PaintContainer>() {
@@ -69,6 +73,9 @@ public class ExhibitionFragment extends Fragment implements AdapterRecyclerPintu
                 recycler.setAdapter(adapterRecyclerPinturas);
                 recycler.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
                 //recycler.setLayoutManager(new GridLayoutManager(getContext(), 2, GridLayoutManager.VERTICAL, false));
+
+                Functionality.loadProgressbar(false, progressBar);
+
             }
         });
 
