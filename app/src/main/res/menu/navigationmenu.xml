@@ -8,6 +8,10 @@
             android:title="Paintings"
             android:icon="@drawable/ic_image_black_24dp" />
         <item
+            android:id="@+id/navmenuChatroom"
+            android:title="Chat"
+            android:icon="@drawable/ic_chat_black_24dp"/>
+        <item
             android:id="@+id/navmenuLogout"
             android:title="Log Out"
             android:icon="@drawable/ic_exit_to_app_black_24dp"/>

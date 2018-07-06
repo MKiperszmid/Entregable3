@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.example.com.entregable.Model.POJO.Paint;
 import com.example.com.entregable.R;
+import com.example.com.entregable.View.Fragments.ChatFragment;
 import com.example.com.entregable.View.Fragments.DetalleFragment;
 import com.example.com.entregable.View.Fragments.ExhibitionFragment;
 import com.facebook.AccessToken;
@@ -47,7 +48,11 @@ public class ExhibicionActivity extends AppCompatActivity implements ExhibitionF
         switch (item.getItemId()){
             case R.id.navmenuPaintings:
                 loadFragment(new ExhibitionFragment());
-                drawerLayout.closeDrawer(Gravity.LEFT);
+                drawerLayout.closeDrawer(Gravity.START);
+                break;
+            case R.id.navmenuChatroom:
+                loadFragment(new ChatFragment());
+                drawerLayout.closeDrawer(Gravity.START);
                 break;
             case R.id.navmenuLogout:
                 logout();
