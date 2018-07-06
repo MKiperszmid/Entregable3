@@ -9,6 +9,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -72,14 +73,14 @@ public class ExhibicionActivity extends AppCompatActivity implements ExhibitionF
     private void logout(){
         FirebaseAuth auth = FirebaseAuth.getInstance();
         FirebaseUser user = auth.getCurrentUser();
-        if(user != null)
+        if(user != null){
+            onBackPressed();
             auth.signOut();
-
-        AccessToken accessToken = AccessToken.getCurrentAccessToken();
-        if(accessToken != null && !accessToken.isExpired()) {
-            LoginManager.getInstance().logOut();
+            AccessToken accessToken = AccessToken.getCurrentAccessToken();
+            if(accessToken != null && !accessToken.isExpired()) {
+                LoginManager.getInstance().logOut();
+            }
         }
-        onBackPressed();
     }
 
     private void loadFragment(Fragment fragment){
