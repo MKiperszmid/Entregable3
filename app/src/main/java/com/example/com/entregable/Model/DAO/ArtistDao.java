@@ -22,6 +22,11 @@ public class ArtistDao {
         artistList = new ArrayList<>();
     }
 
+    //TODO: Agarrar TODOS los artistas, y guardarlos en una lista
+    //A la hora de abrir una imagen, poner el artista de la lista.
+    //Para asi no hacer un request cada vez que se abre una imagen.
+    //Solo una vez al principio.
+
     public void grabArtists(final ResultListener<Artist> listener, final String id){
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference reference = database.getReference().child(ARTISTS_KEY);
@@ -35,7 +40,6 @@ public class ArtistDao {
                         break;
                     }
                 }
-
                 listener.finish(artist);
             }
 
