@@ -18,6 +18,7 @@
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
            tools:text="Artista: "
+           android:textColor="@color/colorBlack"
            android:id="@+id/fd_tv_nombreArtista"
            style="@style/TextArtista"
            android:layout_marginTop="35dp"/>
@@ -25,12 +26,14 @@
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
            tools:text="Nationality: "
+           android:textColor="@color/colorBlack"
            android:id="@+id/fd_tv_nationalityArtista"
            style="@style/TextArtista"/>
        <TextView
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
            tools:text="Influenced by: "
+           android:textColor="@color/colorBlack"
            android:id="@+id/fd_tv_influencedArtista"
            style="@style/TextArtista"/>
    </LinearLayout>

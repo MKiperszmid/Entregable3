@@ -1,10 +1,23 @@
 package com.example.com.entregable.Model.POJO;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
+
+@Entity
 public class Artist {
-    private String Influenced_by;
+
+    @NonNull
+    @PrimaryKey
     private String artistId;
+    @ColumnInfo(name = "name")
     private String name;
+    @ColumnInfo(name = "nationality")
     private String nationality;
+    @ColumnInfo(name = "influenced_by")
+    private String Influenced_by;
 
     public Artist(String Influenced_by, String nationality, String name, String artistId) {
         this.Influenced_by = Influenced_by;
@@ -12,7 +25,7 @@ public class Artist {
         this.name = name;
         this.nationality = nationality;
     }
-
+    @Ignore
     public Artist(){
 
     }
