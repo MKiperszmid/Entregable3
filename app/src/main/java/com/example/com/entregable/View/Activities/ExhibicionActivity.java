@@ -75,6 +75,7 @@ public class ExhibicionActivity extends AppCompatActivity implements ExhibitionF
         FirebaseUser user = auth.getCurrentUser();
         if(user != null){
             onBackPressed();
+            overridePendingTransition(R.anim.slide_der_in, R.anim.slide_der_out);
             auth.signOut();
             AccessToken accessToken = AccessToken.getCurrentAccessToken();
             if(accessToken != null && !accessToken.isExpired()) {

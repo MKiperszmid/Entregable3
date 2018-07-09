@@ -121,6 +121,7 @@ public class MainActivity extends AppCompatActivity {
     private void iniciarExhibicion(){
         Intent intent = new Intent(this, ExhibicionActivity.class);
         startActivity(intent);
+        overridePendingTransition(R.anim.slide_izq_in, R.anim.slide_izq_out);
     }
 
     private void createAccount(String email, String password){
