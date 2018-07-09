@@ -18,15 +18,19 @@ tools:context=".View.Fragments.ChatFragment">
         android:layout_alignParentBottom="true"
         android:background="@color/colorWhite">
         <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:textColor="@color/colorAccent"
+            android:layout_height="match_parent"
             android:layout_weight="5"
             android:id="@+id/fc_et_textoMensaje"/>
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
             android:layout_weight="1"
             android:text="Enviar"
+            android:textColor="@color/colorAccent"
+            android:background="@color/colorLightGray"
             android:id="@+id/fc_tv_enviarMensaje"/>
     </LinearLayout>
 </RelativeLayout>
