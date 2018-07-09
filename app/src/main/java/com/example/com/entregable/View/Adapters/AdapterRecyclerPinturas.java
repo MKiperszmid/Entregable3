@@ -1,14 +1,21 @@
 package com.example.com.entregable.View.Adapters;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.com.entregable.Model.POJO.Paint;
 import com.example.com.entregable.R;
+import com.example.com.entregable.Util.Functionality;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
 
@@ -48,8 +55,11 @@ public class AdapterRecyclerPinturas extends RecyclerView.Adapter {
 
     public class PinturasViewHolder extends RecyclerView.ViewHolder {
         private TextView textView;
+        private ImageView imageView;
+
         public PinturasViewHolder(View itemView) {
             super(itemView);
+            imageView = itemView.findViewById(R.id.crp_iv_pinturaImagen);
             textView = itemView.findViewById(R.id.crp_tv_pinturaName);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -61,8 +71,10 @@ public class AdapterRecyclerPinturas extends RecyclerView.Adapter {
 
         public void bindPintura(Paint paint){
             textView.setText(paint.getName());
+            Functionality.cargarImagenStorage(itemView.getContext(), paint.getImage(), imageView);
         }
     }
+
 
     public interface NotificadorCelda {
         void notificarPintura(Paint paint);

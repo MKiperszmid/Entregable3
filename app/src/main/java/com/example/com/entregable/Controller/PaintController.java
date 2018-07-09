@@ -21,6 +21,5 @@ public class PaintController {
                 listener.finish(result);
             }
         });
-
     }
 }
