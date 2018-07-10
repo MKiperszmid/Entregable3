@@ -14,14 +14,17 @@ import java.io.Serializable;
 
 @Entity
 public class Paint implements Serializable {
-    @NonNull
-    @PrimaryKey
     @ColumnInfo(name = "artistId")
     private Integer artistId;
     @ColumnInfo(name = "image")
     private String image;
     @ColumnInfo(name = "name")
     private String name;
+
+    @NonNull
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
+    private Integer id;
 
     @Ignore
     public Paint(String image, String name, Integer artistId) {
@@ -32,6 +35,15 @@ public class Paint implements Serializable {
 
     public Paint(){
 
+    }
+
+    @NonNull
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(@NonNull Integer id) {
+        this.id = id;
     }
 
     public String getImage() {

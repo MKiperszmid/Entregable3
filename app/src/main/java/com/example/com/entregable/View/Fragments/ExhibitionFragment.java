@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.example.com.entregable.Controller.ArtistController;
 import com.example.com.entregable.Controller.ResultListener;
+import com.example.com.entregable.Model.DAO.AppDatabase;
 import com.example.com.entregable.Model.POJO.Artist;
 import com.example.com.entregable.Model.POJO.ArtistContainer;
 import com.example.com.entregable.Model.POJO.Paint;
@@ -58,29 +59,46 @@ public class ExhibitionFragment extends Fragment implements AdapterRecyclerPintu
         View view = inflater.inflate(R.layout.fragment_exhibition, container, false);
         recycler = view.findViewById(R.id.fe_rv_pinturas);
         progressBar = view.findViewById(R.id.fe_pb_progress);
-        grabInfo();
+        //grabInfo(view);
+        getPaints(view);
         return view;
     }
 
-    private void grabInfo(){
+    private void grabInfo(final View view){
         Functionality.loadProgressbar(true, progressBar);
         PaintController controller = new PaintController();
 
         controller.getPaints(new ResultListener<PaintContainer>() {
             @Override
             public void finish(PaintContainer result) {
-                AdapterRecyclerPinturas adapterRecyclerPinturas = new AdapterRecyclerPinturas(result.getPaints(), ExhibitionFragment.this);
-                recycler.setAdapter(adapterRecyclerPinturas);
-                recycler.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-                //recycler.setLayoutManager(new GridLayoutManager(getContext(), 2, GridLayoutManager.VERTICAL, false));
-
-                Functionality.loadProgressbar(false, progressBar);
-
+                AppDatabase appDatabase = AppDatabase.getInMemoryDatabase(view.getContext());
+                appDatabase.paintDao().insertAllPaints(result.getPaints());
+                loadRecycler(result.getPaints());
             }
         });
 
-
         ((ExhibicionActivity)getActivity()).getSupportActionBar().setTitle(nombreSeccion);
+    }
+
+    private void loadRecycler(List<Paint> paints){
+        AdapterRecyclerPinturas adapterRecyclerPinturas = new AdapterRecyclerPinturas(paints, ExhibitionFragment.this);
+        recycler.setAdapter(adapterRecyclerPinturas);
+        recycler.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        //recycler.setLayoutManager(new GridLayoutManager(getContext(), 2, GridLayoutManager.VERTICAL, false));
+        Functionality.loadProgressbar(false, progressBar);
+    }
+
+    private void getPaints(View view){
+        AppDatabase appDatabase = AppDatabase.getInMemoryDatabase(view.getContext());
+        List<Paint> container = null;
+
+        container = appDatabase.paintDao().getAllPaints();
+        if(container == null || container.size() <= 0){
+            grabInfo(view);
+        }
+        else {
+            loadRecycler(container);
+        }
     }
 
     @Override

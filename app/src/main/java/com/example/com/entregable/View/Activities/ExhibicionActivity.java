@@ -61,8 +61,6 @@ public class ExhibicionActivity extends AppCompatActivity implements ExhibitionF
         }
     }
 
-
-
     @Override
     public void notificar(Paint paint) {
         Bundle bundle = new Bundle();

@@ -6,6 +6,7 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 
 import com.example.com.entregable.Model.POJO.Paint;
+import com.example.com.entregable.Model.POJO.PaintContainer;
 
 import java.util.List;
 
@@ -20,6 +21,9 @@ public interface IPaintDao {
 
     @Query("SELECT * FROM paint WHERE artistId = :id")
     Paint getPaintByArtistID(String id);
+
+    @Insert
+    void insertAllPaints(List<Paint> paintContainer);
 
     @Insert
     void insertPaint(Paint paint);
