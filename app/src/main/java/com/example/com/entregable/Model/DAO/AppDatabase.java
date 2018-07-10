@@ -15,18 +15,20 @@ import com.example.com.entregable.Model.POJO.Paint;
 @Database(entities = {Artist.class, Paint.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase INSTANCE;
+    public static final String DATABASE_NAME = "Entregable3DB";
 
     public abstract IArtistDao artistDao();
     public abstract IPaintDao paintDao();
 
     public static AppDatabase getInMemoryDatabase(Context context) {
         if (INSTANCE == null) {
-            INSTANCE =
+            /*INSTANCE =
                     Room.inMemoryDatabaseBuilder(context.getApplicationContext(), AppDatabase.class)
-                            // To simplify the codelab, allow queries on the main thread.
-                            // Don't do this on a real app! See PersistenceBasicSample for an example.
                             .allowMainThreadQueries()
-                            .build();
+                            .build();*/
+            INSTANCE = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, DATABASE_NAME)
+                    .allowMainThreadQueries()
+                    .build();
         }
         return INSTANCE;
     }

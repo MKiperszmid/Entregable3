@@ -25,6 +25,12 @@ public class Functionality {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference reference = storage.getReference();
         reference = reference.child(path);
-        Glide.with(context).using(new FirebaseImageLoader()).load(reference).into(imageView);
+        try{
+            Glide.with(context).using(new FirebaseImageLoader()).load(reference).into(imageView);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            //No puede cargar la imagen
+        }
     }
 }

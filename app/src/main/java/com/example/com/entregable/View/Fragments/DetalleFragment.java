@@ -71,6 +71,7 @@ public class DetalleFragment extends Fragment {
         Artist artist = null;
 
         artist = database.artistDao().getArtistByID(id);
+
         if(artist == null){
             //Artista no esta en la base de datos
             grabInfoArtist(id, view);
