@@ -1,11 +1,17 @@
 package com.example.com.entregable.Controller;
 
+import android.content.Context;
+
+import com.example.com.entregable.Model.DAO.AppDatabase;
 import com.example.com.entregable.Model.DAO.ArtistDao;
 import com.example.com.entregable.Model.POJO.Artist;
 import com.example.com.entregable.Model.POJO.ArtistContainer;
 
+import java.util.List;
+
 public class ArtistController {
     private ArtistDao artistDao;
+    private AppDatabase appDatabase;
 
     public ArtistController(){
         this.artistDao = new ArtistDao();
@@ -18,5 +24,11 @@ public class ArtistController {
                 listener.finish(result);
             }
         }, id);
+    }
+
+    private Artist grabArtistsDB(Context context, String id){
+        appDatabase = AppDatabase.getInstance(context);
+
+        return appDatabase.artistDao().findById(id);
     }
 }

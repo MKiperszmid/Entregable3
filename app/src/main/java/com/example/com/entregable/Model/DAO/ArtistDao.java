@@ -1,5 +1,6 @@
 package com.example.com.entregable.Model.DAO;
 
+import android.arch.persistence.room.Dao;
 import android.support.annotation.NonNull;
 
 import com.example.com.entregable.Controller.ResultListener;
@@ -22,11 +23,6 @@ public class ArtistDao {
         artistList = new ArrayList<>();
     }
 
-    //TODO: Agarrar TODOS los artistas, y guardarlos en una lista
-    //A la hora de abrir una imagen, poner el artista de la lista.
-    //Para asi no hacer un request cada vez que se abre una imagen.
-    //Solo una vez al principio.
-
     public void grabArtists(final ResultListener<Artist> listener, final String id){
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference reference = database.getReference().child(ARTISTS_KEY);
@@ -41,30 +37,6 @@ public class ArtistDao {
                     }
                 }
                 listener.finish(artist);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                //Null?
-            }
-        });
-    }
-
-
-    public void grabArtists(final ResultListener<ArtistContainer> listener){
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference reference = database.getReference().child(ARTISTS_KEY);
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    Artist artist = snapshot.getValue(Artist.class);
-                    artistList.add(artist);
-                }
-
-                ArtistContainer artistContainer = new ArtistContainer(artistList);
-
-                listener.finish(artistContainer);
             }
 
             @Override
