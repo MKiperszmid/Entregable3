@@ -26,7 +26,7 @@ public class Artist {
         this.name = name;
         this.nationality = nationality;
     }
-    @Ignore
+
     public Artist(){
 
     }

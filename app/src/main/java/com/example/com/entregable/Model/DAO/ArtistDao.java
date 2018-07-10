@@ -45,4 +45,27 @@ public class ArtistDao {
             }
         });
     }
+
+
+    public void grabAllArtists(final ResultListener<ArtistContainer> listener){
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference reference = database.getReference().child(ARTISTS_KEY);
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            Artist artist = null;
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    artist = snapshot.getValue(Artist.class);
+                    artistList.add(artist);
+                }
+                ArtistContainer container = new ArtistContainer(artistList);
+                listener.finish(container);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                //Null?
+            }
+        });
+    }
 }

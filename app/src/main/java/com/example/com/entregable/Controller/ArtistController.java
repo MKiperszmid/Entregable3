@@ -26,9 +26,12 @@ public class ArtistController {
         }, id);
     }
 
-    private Artist grabArtistsDB(Context context, String id){
-        appDatabase = AppDatabase.getInstance(context);
-
-        return appDatabase.artistDao().findById(id);
+    public void grabAllArtists(final ResultListener<ArtistContainer> listener){
+        artistDao.grabAllArtists(new ResultListener<ArtistContainer>() {
+            @Override
+            public void finish(ArtistContainer result) {
+                listener.finish(result);
+            }
+        });
     }
 }

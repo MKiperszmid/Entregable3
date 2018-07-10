@@ -12,12 +12,17 @@ import android.widget.TextView;
 
 import com.example.com.entregable.Controller.ArtistController;
 import com.example.com.entregable.Controller.ResultListener;
+import com.example.com.entregable.Model.DAO.AppDatabase;
 import com.example.com.entregable.Model.POJO.Artist;
+import com.example.com.entregable.Model.POJO.ArtistContainer;
 import com.example.com.entregable.Model.POJO.Paint;
 import com.example.com.entregable.R;
 import com.example.com.entregable.Util.Functionality;
 import com.example.com.entregable.View.Activities.ExhibicionActivity;
 import com.google.firebase.storage.FirebaseStorage;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -31,6 +36,7 @@ public class DetalleFragment extends Fragment {
     private ProgressBar progressBar;
     private ImageView ivImagen;
     private Paint paint;
+    private List<Artist> artistList;
 
     public DetalleFragment() {
         // Required empty public constructor
@@ -42,6 +48,7 @@ public class DetalleFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_detalle, container, false);
+        artistList = new ArrayList<>();
         //FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
         progressBar = view.findViewById(R.id.fd_pb_progress);
 
@@ -53,9 +60,44 @@ public class DetalleFragment extends Fragment {
 
         ((ExhibicionActivity)getActivity()).getSupportActionBar().setTitle(paint.getName());
 
-        grabInfoArtist(paint.getArtistId().toString(), view);
-
+       // grabInfoArtist(paint.getArtistId().toString(), view);
+        //grabAllArtists();
+        grabArtist(paint.getArtistId().toString(), view);
         return view;
+    }
+
+    private void grabArtist(String id, View view) {
+        AppDatabase database = AppDatabase.getInMemoryDatabase(getContext());
+        Artist artist = null;
+
+        artist = database.artistDao().getArtistByID(id);
+        if(artist == null){
+            //Artista no esta en la base de datos
+            grabInfoArtist(id, view);
+        }
+        else {
+            //Artista SI esta en la base de datos
+            setInfo(view, artist);
+        }
+    }
+
+    private void grabAllArtists(){
+        saveAllArtists();
+        AppDatabase appDatabase = AppDatabase.getInMemoryDatabase(getContext());
+        appDatabase.artistDao().getAllArtists();
+    }
+
+    private void saveAllArtists(){
+        ArtistController artistController = new ArtistController();
+        final AppDatabase appDatabase = AppDatabase.getInMemoryDatabase(getContext());
+        artistController.grabAllArtists(new ResultListener<ArtistContainer>() {
+            @Override
+            public void finish(ArtistContainer result) {
+                for(Artist artist : result.getArtists()){
+                    appDatabase.artistDao().insertArtist(artist);
+                }
+            }
+        });
     }
 
     private void grabInfoArtist(String id, final View view){
@@ -65,6 +107,8 @@ public class DetalleFragment extends Fragment {
             public void finish(Artist result) {
                 if(result != null){
                     setInfo(view, result);
+                    AppDatabase appDatabase = AppDatabase.getInMemoryDatabase(view.getContext());
+                    appDatabase.artistDao().insertArtist(result);
                 }
             }
         }, id);
