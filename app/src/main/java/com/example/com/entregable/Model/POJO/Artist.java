@@ -1,11 +1,25 @@
 package com.example.com.entregable.Model.POJO;
 
-public class Artist {
-    private String Influenced_by;
-    private String artistId;
-    private String name;
-    private String nationality;
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
 
+@Entity
+public class Artist {
+    @NonNull
+    @PrimaryKey
+    @ColumnInfo(name = "artistId")
+    private String artistId;
+    @ColumnInfo(name = "name")
+    private String name;
+    @ColumnInfo(name = "nationality")
+    private String nationality;
+    @ColumnInfo(name = "influenced_by")
+    private String Influenced_by;
+
+    @Ignore
     public Artist(String Influenced_by, String nationality, String name, String artistId) {
         this.Influenced_by = Influenced_by;
         this.artistId = artistId;

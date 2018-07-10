@@ -63,8 +63,8 @@
                         android:id="@+id/am_teet_passTexto"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textEmailAddress"
-                        style="@style/MaterialEditText"/>
+                        android:inputType="textPassword"
+                        style="@style/MaterialEditText" />
                 </android.support.design.widget.TextInputLayout>
 
                 <RelativeLayout
