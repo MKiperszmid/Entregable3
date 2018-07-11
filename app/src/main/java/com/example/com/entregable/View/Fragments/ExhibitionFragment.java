@@ -5,8 +5,6 @@ package com.example.com.entregable.View.Fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,17 +12,15 @@ import android.view.ViewGroup;
 
 import android.support.v7.widget.RecyclerView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
-import com.example.com.entregable.Controller.ArtistController;
 import com.example.com.entregable.Controller.ResultListener;
 import com.example.com.entregable.Model.DAO.AppDatabase;
 import com.example.com.entregable.Model.POJO.Artist;
-import com.example.com.entregable.Model.POJO.ArtistContainer;
 import com.example.com.entregable.Model.POJO.Paint;
 import com.example.com.entregable.Model.POJO.PaintContainer;
 import com.example.com.entregable.R;
 import com.example.com.entregable.Controller.PaintController;
+import com.example.com.entregable.Tasks.PaintTask;
 import com.example.com.entregable.Util.Functionality;
 import com.example.com.entregable.View.Activities.ExhibicionActivity;
 import com.example.com.entregable.View.Adapters.AdapterRecyclerPinturas;
@@ -41,6 +37,7 @@ public class ExhibitionFragment extends Fragment implements AdapterRecyclerPintu
     private NotificadorExhibitionActivity notificadorExhibitionActivity;
     private String nombreSeccion = "Pinturas";
     private ProgressBar progressBar;
+    private View myView;
 
     public ExhibitionFragment() {
         // Required empty public constructor
@@ -60,18 +57,25 @@ public class ExhibitionFragment extends Fragment implements AdapterRecyclerPintu
         recycler = view.findViewById(R.id.fe_rv_pinturas);
         progressBar = view.findViewById(R.id.fe_pb_progress);
         //grabInfo(view);
-        getPaints(view);
+        myView = view;
+        //getPaints();
+        PaintTask paintTask = new PaintTask(this);
+        paintTask.execute();
         return view;
     }
 
-    private void grabInfo(final View view){
+    public View getMyView(){
+        return this.myView;
+    }
+
+    public void grabInfo(){
         Functionality.loadProgressbar(true, progressBar);
         PaintController controller = new PaintController();
 
         controller.getPaints(new ResultListener<PaintContainer>() {
             @Override
             public void finish(PaintContainer result) {
-                AppDatabase appDatabase = AppDatabase.getInMemoryDatabase(view.getContext());
+                AppDatabase appDatabase = AppDatabase.getInstance(myView.getContext());
                 appDatabase.paintDao().insertAllPaints(result.getPaints());
                 loadRecycler(result.getPaints());
             }
@@ -80,7 +84,7 @@ public class ExhibitionFragment extends Fragment implements AdapterRecyclerPintu
         ((ExhibicionActivity)getActivity()).getSupportActionBar().setTitle(nombreSeccion);
     }
 
-    private void loadRecycler(List<Paint> paints){
+    public void loadRecycler(List<Paint> paints){
         AdapterRecyclerPinturas adapterRecyclerPinturas = new AdapterRecyclerPinturas(paints, ExhibitionFragment.this);
         recycler.setAdapter(adapterRecyclerPinturas);
         recycler.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
@@ -88,13 +92,13 @@ public class ExhibitionFragment extends Fragment implements AdapterRecyclerPintu
         Functionality.loadProgressbar(false, progressBar);
     }
 
-    private void getPaints(View view){
-        AppDatabase appDatabase = AppDatabase.getInMemoryDatabase(view.getContext());
+    public void getPaints(){
+        AppDatabase appDatabase = AppDatabase.getInstance(myView.getContext());
         List<Paint> container = null;
 
         container = appDatabase.paintDao().getAllPaints();
         if(container == null || container.size() <= 0){
-            grabInfo(view);
+            grabInfo();
         }
         else {
             loadRecycler(container);

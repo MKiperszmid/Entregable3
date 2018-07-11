@@ -17,9 +17,9 @@ import com.example.com.entregable.Model.POJO.Artist;
 import com.example.com.entregable.Model.POJO.ArtistContainer;
 import com.example.com.entregable.Model.POJO.Paint;
 import com.example.com.entregable.R;
+import com.example.com.entregable.Tasks.ArtistTask;
 import com.example.com.entregable.Util.Functionality;
 import com.example.com.entregable.View.Activities.ExhibicionActivity;
-import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +37,7 @@ public class DetalleFragment extends Fragment {
     private ImageView ivImagen;
     private Paint paint;
     private List<Artist> artistList;
+    private View myView;
 
     public DetalleFragment() {
         // Required empty public constructor
@@ -62,35 +63,38 @@ public class DetalleFragment extends Fragment {
 
        // grabInfoArtist(paint.getArtistId().toString(), view);
         //grabAllArtists();
-        grabArtist(paint.getArtistId().toString(), view);
+        myView = view;
+        //grabArtist(paint.getArtistId().toString());
+        ArtistTask artistTask = new ArtistTask(this, paint.getArtistId().toString());
+        artistTask.execute();
         return view;
     }
 
-    private void grabArtist(String id, View view) {
-        AppDatabase database = AppDatabase.getInMemoryDatabase(getContext());
+    private void grabArtist(String id) {
+        AppDatabase database = AppDatabase.getInstance(getContext());
         Artist artist = null;
 
         artist = database.artistDao().getArtistByID(id);
 
         if(artist == null){
             //Artista no esta en la base de datos
-            grabInfoArtist(id, view);
+            grabInfoArtist(id);
         }
         else {
             //Artista SI esta en la base de datos
-            setInfo(view, artist);
+            setInfo(artist);
         }
     }
 
     private void grabAllArtists(){
         saveAllArtists();
-        AppDatabase appDatabase = AppDatabase.getInMemoryDatabase(getContext());
+        AppDatabase appDatabase = AppDatabase.getInstance(getContext());
         appDatabase.artistDao().getAllArtists();
     }
 
     private void saveAllArtists(){
         ArtistController artistController = new ArtistController();
-        final AppDatabase appDatabase = AppDatabase.getInMemoryDatabase(getContext());
+        final AppDatabase appDatabase = AppDatabase.getInstance(getContext());
         artistController.grabAllArtists(new ResultListener<ArtistContainer>() {
             @Override
             public void finish(ArtistContainer result) {
@@ -101,30 +105,30 @@ public class DetalleFragment extends Fragment {
         });
     }
 
-    private void grabInfoArtist(String id, final View view){
+    public void grabInfoArtist(String id){
         ArtistController artistController = new ArtistController();
         artistController.grabArtists(new ResultListener<Artist>() {
             @Override
             public void finish(Artist result) {
                 if(result != null){
-                    setInfo(view, result);
-                    AppDatabase appDatabase = AppDatabase.getInMemoryDatabase(view.getContext());
+                    setInfo(result);
+                    AppDatabase appDatabase = AppDatabase.getInstance(myView.getContext());
                     appDatabase.artistDao().insertArtist(result);
                 }
             }
         }, id);
     }
 
-    private void setInfo(View view, Artist artist){
-        tvName = view.findViewById(R.id.fd_tv_nombreArtista);
-        tvNationality = view.findViewById(R.id.fd_tv_nationalityArtista);
-        tvInfluenced = view.findViewById(R.id.fd_tv_influencedArtista);
-        ivImagen = view.findViewById(R.id.fd_iv_imagen);
+    public void setInfo(Artist artist){
+        tvName = myView.findViewById(R.id.fd_tv_nombreArtista);
+        tvNationality = myView.findViewById(R.id.fd_tv_nationalityArtista);
+        tvInfluenced = myView.findViewById(R.id.fd_tv_influencedArtista);
+        ivImagen = myView.findViewById(R.id.fd_iv_imagen);
 
         String name = "Artista: " + artist.getName();
         String nationality = "Nationality: " + artist.getNationality();
         String influenced = "Influenced by: " + artist.getInfluenced_by();
-        Functionality.cargarImagenStorage(view.getContext(), paint.getImage(), ivImagen);
+        Functionality.cargarImagenStorage(myView.getContext(), paint.getImage(), ivImagen);
 
         tvName.setText(name);
         tvNationality.setText(nationality);

@@ -20,7 +20,7 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract IArtistDao artistDao();
     public abstract IPaintDao paintDao();
 
-    public static AppDatabase getInMemoryDatabase(Context context) {
+    public static AppDatabase getInstance(Context context) {
         if (INSTANCE == null) {
             /*INSTANCE =
                     Room.inMemoryDatabaseBuilder(context.getApplicationContext(), AppDatabase.class)
