@@ -11,6 +11,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.com.entregable.Controller.ArtistController;
+import com.example.com.entregable.Controller.ArtistTask;
 import com.example.com.entregable.Controller.ResultListener;
 import com.example.com.entregable.Model.DAO.AppDatabase;
 import com.example.com.entregable.Model.POJO.Artist;
@@ -19,7 +20,6 @@ import com.example.com.entregable.Model.POJO.Paint;
 import com.example.com.entregable.R;
 import com.example.com.entregable.Util.Functionality;
 import com.example.com.entregable.View.Activities.ExhibicionActivity;
-import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,9 +50,7 @@ public class DetalleFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_detalle, container, false);
         artistList = new ArrayList<>();
         //FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
-        progressBar = view.findViewById(R.id.fd_pb_progress);
 
-        Functionality.loadProgressbar(true, progressBar);
 
         Bundle bundle = getArguments();
 
@@ -62,12 +60,15 @@ public class DetalleFragment extends Fragment {
 
        // grabInfoArtist(paint.getArtistId().toString(), view);
         //grabAllArtists();
-        grabArtist(paint.getArtistId().toString(), view);
+        //grabArtist(paint.getArtistId().toString(), view);
+        ArtistTask myTask = new ArtistTask(view, paint, tvName, tvNationality, tvInfluenced, ivImagen, progressBar);
+        myTask.execute();
+
         return view;
     }
 
     private void grabArtist(String id, View view) {
-        AppDatabase database = AppDatabase.getInMemoryDatabase(getContext());
+        AppDatabase database = AppDatabase.getInstance(getContext());
         Artist artist = null;
 
         artist = database.artistDao().getArtistByID(id);
@@ -84,13 +85,13 @@ public class DetalleFragment extends Fragment {
 
     private void grabAllArtists(){
         saveAllArtists();
-        AppDatabase appDatabase = AppDatabase.getInMemoryDatabase(getContext());
+        AppDatabase appDatabase = AppDatabase.getInstance(getContext());
         appDatabase.artistDao().getAllArtists();
     }
 
     private void saveAllArtists(){
         ArtistController artistController = new ArtistController();
-        final AppDatabase appDatabase = AppDatabase.getInMemoryDatabase(getContext());
+        final AppDatabase appDatabase = AppDatabase.getInstance(getContext());
         artistController.grabAllArtists(new ResultListener<ArtistContainer>() {
             @Override
             public void finish(ArtistContainer result) {
@@ -108,7 +109,7 @@ public class DetalleFragment extends Fragment {
             public void finish(Artist result) {
                 if(result != null){
                     setInfo(view, result);
-                    AppDatabase appDatabase = AppDatabase.getInMemoryDatabase(view.getContext());
+                    AppDatabase appDatabase = AppDatabase.getInstance(view.getContext());
                     appDatabase.artistDao().insertArtist(result);
                 }
             }

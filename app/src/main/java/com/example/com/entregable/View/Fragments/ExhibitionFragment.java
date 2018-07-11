@@ -5,8 +5,6 @@ package com.example.com.entregable.View.Fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,13 +12,11 @@ import android.view.ViewGroup;
 
 import android.support.v7.widget.RecyclerView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
-import com.example.com.entregable.Controller.ArtistController;
+import com.example.com.entregable.Controller.PaintTask;
 import com.example.com.entregable.Controller.ResultListener;
 import com.example.com.entregable.Model.DAO.AppDatabase;
 import com.example.com.entregable.Model.POJO.Artist;
-import com.example.com.entregable.Model.POJO.ArtistContainer;
 import com.example.com.entregable.Model.POJO.Paint;
 import com.example.com.entregable.Model.POJO.PaintContainer;
 import com.example.com.entregable.R;
@@ -39,7 +35,7 @@ public class ExhibitionFragment extends Fragment implements AdapterRecyclerPintu
     private RecyclerView recycler;
     private List<Artist> artistList;
     private NotificadorExhibitionActivity notificadorExhibitionActivity;
-    private String nombreSeccion = "Pinturas";
+    public static final String NOMBRE_SECCION = "Pinturas";
     private ProgressBar progressBar;
 
     public ExhibitionFragment() {
@@ -57,10 +53,11 @@ public class ExhibitionFragment extends Fragment implements AdapterRecyclerPintu
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_exhibition, container, false);
-        recycler = view.findViewById(R.id.fe_rv_pinturas);
-        progressBar = view.findViewById(R.id.fe_pb_progress);
+
         //grabInfo(view);
-        getPaints(view);
+        //getPaints(view);
+        PaintTask paintTask = new PaintTask(view, progressBar, recycler, this, (ExhibicionActivity)getActivity());
+        paintTask.execute();
         return view;
     }
 
@@ -71,13 +68,13 @@ public class ExhibitionFragment extends Fragment implements AdapterRecyclerPintu
         controller.getPaints(new ResultListener<PaintContainer>() {
             @Override
             public void finish(PaintContainer result) {
-                AppDatabase appDatabase = AppDatabase.getInMemoryDatabase(view.getContext());
+                AppDatabase appDatabase = AppDatabase.getInstance(view.getContext());
                 appDatabase.paintDao().insertAllPaints(result.getPaints());
                 loadRecycler(result.getPaints());
             }
         });
 
-        ((ExhibicionActivity)getActivity()).getSupportActionBar().setTitle(nombreSeccion);
+        ((ExhibicionActivity)getActivity()).getSupportActionBar().setTitle(NOMBRE_SECCION);
     }
 
     private void loadRecycler(List<Paint> paints){
@@ -89,7 +86,7 @@ public class ExhibitionFragment extends Fragment implements AdapterRecyclerPintu
     }
 
     private void getPaints(View view){
-        AppDatabase appDatabase = AppDatabase.getInMemoryDatabase(view.getContext());
+        AppDatabase appDatabase = AppDatabase.getInstance(view.getContext());
         List<Paint> container = null;
 
         container = appDatabase.paintDao().getAllPaints();
