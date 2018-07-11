@@ -35,7 +35,7 @@ public class ExhibitionFragment extends Fragment implements AdapterRecyclerPintu
     private RecyclerView recycler;
     private List<Artist> artistList;
     private NotificadorExhibitionActivity notificadorExhibitionActivity;
-    private String nombreSeccion = "Pinturas";
+    public static final String NOMBRE_SECCION = "Pinturas";
     private ProgressBar progressBar;
     private View myView;
 
@@ -54,8 +54,7 @@ public class ExhibitionFragment extends Fragment implements AdapterRecyclerPintu
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_exhibition, container, false);
-        recycler = view.findViewById(R.id.fe_rv_pinturas);
-        progressBar = view.findViewById(R.id.fe_pb_progress);
+
         //grabInfo(view);
         myView = view;
         //getPaints();
@@ -81,7 +80,7 @@ public class ExhibitionFragment extends Fragment implements AdapterRecyclerPintu
             }
         });
 
-        ((ExhibicionActivity)getActivity()).getSupportActionBar().setTitle(nombreSeccion);
+        ((ExhibicionActivity)getActivity()).getSupportActionBar().setTitle(NOMBRE_SECCION);
     }
 
     public void loadRecycler(List<Paint> paints){

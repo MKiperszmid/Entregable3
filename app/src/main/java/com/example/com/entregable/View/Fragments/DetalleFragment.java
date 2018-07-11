@@ -11,6 +11,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.com.entregable.Controller.ArtistController;
+import com.example.com.entregable.Controller.ArtistTask;
 import com.example.com.entregable.Controller.ResultListener;
 import com.example.com.entregable.Model.DAO.AppDatabase;
 import com.example.com.entregable.Model.POJO.Artist;
@@ -51,9 +52,7 @@ public class DetalleFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_detalle, container, false);
         artistList = new ArrayList<>();
         //FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
-        progressBar = view.findViewById(R.id.fd_pb_progress);
 
-        Functionality.loadProgressbar(true, progressBar);
 
         Bundle bundle = getArguments();
 
