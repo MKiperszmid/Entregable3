@@ -3,6 +3,7 @@ package com.example.com.entregable.View.Fragments;
 
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -56,6 +57,8 @@ public class ExhibitionFragment extends Fragment implements AdapterRecyclerPintu
         View view = inflater.inflate(R.layout.fragment_exhibition, container, false);
 
         //grabInfo(view);
+        recycler = view.findViewById(R.id.fe_rv_pinturas);
+        progressBar = view.findViewById(R.id.fe_pb_progress);
         myView = view;
         //getPaints();
         PaintTask paintTask = new PaintTask(this);
@@ -73,9 +76,16 @@ public class ExhibitionFragment extends Fragment implements AdapterRecyclerPintu
 
         controller.getPaints(new ResultListener<PaintContainer>() {
             @Override
-            public void finish(PaintContainer result) {
-                AppDatabase appDatabase = AppDatabase.getInstance(myView.getContext());
-                appDatabase.paintDao().insertAllPaints(result.getPaints());
+            public void finish(final PaintContainer result) {
+                final AppDatabase database = AppDatabase.getInstance(myView.getContext());
+                AsyncTask.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        database.paintDao().insertAllPaints(result.getPaints());
+                    }
+                });
+             //   AppDatabase appDatabase = AppDatabase.getInstance(myView.getContext());
+               //  appDatabase.paintDao().insertAllPaints(result.getPaints());
                 loadRecycler(result.getPaints());
             }
         });

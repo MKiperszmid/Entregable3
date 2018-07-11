@@ -10,7 +10,6 @@ public class ArtistTask extends AsyncTask<Void, Void, Artist> {
 
     private DetalleFragment fragment;
     private AppDatabase database;
-    private Artist myArtist;
     private String id;
 
     public ArtistTask(DetalleFragment fragment, String id){
@@ -30,13 +29,12 @@ public class ArtistTask extends AsyncTask<Void, Void, Artist> {
 
     @Override
     protected void onPostExecute(Artist artist) {
-        myArtist = artist;
 
         if(artist == null){
             fragment.grabInfoArtist(id);
         }
         else {
-            fragment.setInfo(myArtist);
+            fragment.setInfo(artist);
         }
     }
 }

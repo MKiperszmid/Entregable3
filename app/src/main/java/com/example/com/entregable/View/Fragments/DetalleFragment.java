@@ -1,6 +1,7 @@
 package com.example.com.entregable.View.Fragments;
 
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,7 +12,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.com.entregable.Controller.ArtistController;
-import com.example.com.entregable.Controller.ArtistTask;
 import com.example.com.entregable.Controller.ResultListener;
 import com.example.com.entregable.Model.DAO.AppDatabase;
 import com.example.com.entregable.Model.POJO.Artist;
@@ -39,6 +39,7 @@ public class DetalleFragment extends Fragment {
     private Paint paint;
     private List<Artist> artistList;
     private View myView;
+    private ArtistTask artistTask;
 
     public DetalleFragment() {
         // Required empty public constructor
@@ -63,8 +64,11 @@ public class DetalleFragment extends Fragment {
        // grabInfoArtist(paint.getArtistId().toString(), view);
         //grabAllArtists();
         myView = view;
+
+        progressBar = myView.findViewById(R.id.fd_pb_progress);
+
         //grabArtist(paint.getArtistId().toString());
-        ArtistTask artistTask = new ArtistTask(this, paint.getArtistId().toString());
+        artistTask = new ArtistTask(this, paint.getArtistId().toString());
         artistTask.execute();
         return view;
     }
@@ -105,14 +109,22 @@ public class DetalleFragment extends Fragment {
     }
 
     public void grabInfoArtist(String id){
+        Functionality.loadProgressbar(true, progressBar);
         ArtistController artistController = new ArtistController();
         artistController.grabArtists(new ResultListener<Artist>() {
             @Override
-            public void finish(Artist result) {
+            public void finish(final Artist result) {
                 if(result != null){
                     setInfo(result);
-                    AppDatabase appDatabase = AppDatabase.getInstance(myView.getContext());
-                    appDatabase.artistDao().insertArtist(result);
+                    final AppDatabase database = AppDatabase.getInstance(myView.getContext());
+                    AsyncTask.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            database.artistDao().insertArtist(result);
+                        }
+                    });
+                 //   AppDatabase appDatabase = AppDatabase.getInstance(myView.getContext());
+                 //  appDatabase.artistDao().insertArtist(result);
                 }
             }
         }, id);
