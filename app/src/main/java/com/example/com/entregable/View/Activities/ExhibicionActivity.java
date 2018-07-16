@@ -69,16 +69,20 @@ public class ExhibicionActivity extends AppCompatActivity implements ExhibitionF
     }
 
     private void logout(){
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        FirebaseUser user = auth.getCurrentUser();
-        if(user != null){
-            onBackPressed();
-            overridePendingTransition(R.anim.slide_der_in, R.anim.slide_der_out);
-            auth.signOut();
-            AccessToken accessToken = AccessToken.getCurrentAccessToken();
-            if(accessToken != null && !accessToken.isExpired()) {
-                LoginManager.getInstance().logOut();
+        try{
+            FirebaseAuth auth = FirebaseAuth.getInstance();
+            FirebaseUser user = auth.getCurrentUser();
+            if(user != null){
+                overridePendingTransition(R.anim.slide_der_in, R.anim.slide_der_out);
+                auth.signOut();
+                onBackPressed();
+                AccessToken accessToken = AccessToken.getCurrentAccessToken();
+                if(accessToken != null && !accessToken.isExpired()) {
+                    LoginManager.getInstance().logOut();
+                }
             }
+        } catch (Exception e){
+            //Bug el usuario ya estaba deslogueado y misteriosamente se encontraba en la exhibicion
         }
     }
 
