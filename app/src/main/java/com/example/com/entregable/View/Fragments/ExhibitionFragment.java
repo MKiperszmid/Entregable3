@@ -77,6 +77,9 @@ public class ExhibitionFragment extends Fragment implements AdapterRecyclerPintu
         controller.getPaints(new ResultListener<PaintContainer>() {
             @Override
             public void finish(final PaintContainer result) {
+                //TODO: Hacer que el Fragment NO conozca al Database.
+                //Poniendolo en Controller o lo que sea.
+                //Y a la hora de llamar al metodo, pasar el myView.getContext() que necesita la instancia del Database.
                 final AppDatabase database = AppDatabase.getInstance(myView.getContext());
                 AsyncTask.execute(new Runnable() {
                     @Override

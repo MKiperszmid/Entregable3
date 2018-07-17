@@ -29,7 +29,6 @@ public class ArtistTask extends AsyncTask<Void, Void, Artist> {
 
     @Override
     protected void onPostExecute(Artist artist) {
-
         if(artist == null){
             fragment.grabInfoArtist(id);
         }
