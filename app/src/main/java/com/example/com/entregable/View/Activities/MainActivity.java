@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.com.entregable.Model.POJO.Account;
 import com.example.com.entregable.R;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -31,67 +32,41 @@ import java.util.Arrays;
 public class MainActivity extends AppCompatActivity {
 
     private CallbackManager callbackManager;
-    private LoginButton loginButton;
-    private TextView createAccount;
     private EditText etEmail;
     private EditText etPass;
-    private TextInputLayout emailContainer;
-    private TextInputLayout passContainer;
-    private TextView loginAccount;
 
-    private static final String EMAIL = "email";
     private FirebaseAuth mAuth;
-    private String nombreSeccion = "Ingreso";
-
-    /*
-     * Mostramos cardview con nombre de pintura, pero no de Artista.
-     * Lo que sabemos de la Paint, es su foto, su nombre, y su ArtistId. (La foto, el path. Asique esto se aplica con Storage)
-     * Cuando clickeamos la foto, deberiamos hacer un artistController.grabArtists, que le pase el ID del artista (con un getArtistId en la Paint)
-     * Y cargar la informacion, basado en lo que obtenemos.
-     *
-     * Agarrar una lista de Artistas, en este entregable, no es necesario. Ya que no lo pide en ningun momento.
-     *
-     *
-     */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        createAccount = findViewById(R.id.am_tv_crearCuenta);
+        TextView createAccount = findViewById(R.id.am_tv_crearCuenta);
         etEmail = findViewById(R.id.am_teet_emailTexto);
         etPass = findViewById(R.id.am_teet_passTexto);
-        emailContainer = findViewById(R.id.am_til_emailContainer);
-        passContainer = findViewById(R.id.am_til_passContainer);
-        loginAccount = findViewById(R.id.am_tv_loginCuenta);
-
-        getSupportActionBar().setTitle(nombreSeccion);
+        TextView loginAccount = findViewById(R.id.am_tv_loginCuenta);
+        getSupportActionBar().setTitle("Ingreso");
 
         createAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String email = etEmail.getText().toString();
-                String pass = etPass.getText().toString();
-                if(!email.contains("@")){
-                    emailContainer.setError("Falta un @ en email!");
-                    return;
-                }
 
-                createAccount(email, pass);
+                Account account = accountMaker();
+                if(account.validLogin()) createAccount(account);
             }
         });
 
         loginAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String email = etEmail.getText().toString();
-                String pass = etPass.getText().toString();
-                loginAccount(email, pass);
+                Account account = accountMaker();
+                if(account.validLogin()) loginAccount(account);
+                else Toast.makeText(MainActivity.this, "No pueden haber valores vacios", Toast.LENGTH_SHORT).show();
             }
         });
 
         callbackManager = CallbackManager.Factory.create();
-        loginButton =  findViewById(R.id.login_button);
+        LoginButton loginButton = findViewById(R.id.login_button);
         loginButton.setReadPermissions("email", "public_profile");
 
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
@@ -112,6 +87,12 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private Account accountMaker(){
+        String email = etEmail.getText().toString();
+        String pass = etPass.getText().toString();
+        return new Account(email, pass);
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -124,50 +105,37 @@ public class MainActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.slide_izq_in, R.anim.slide_izq_out);
     }
 
-    private void createAccount(String email, String password){
-        mAuth.createUserWithEmailAndPassword(email, password)
+    private void createAccount(Account account){
+        mAuth.createUserWithEmailAndPassword(account.getEmail(), account.getPassword())
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
                             Log.d("CREATEACCOUNT", "createUserWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            //updateUI(user);
                             iniciarExhibicion();
                         } else {
-                            // If sign in fails, display a message to the user.
                             Log.w("CREATEACCOUNT", "createUserWithEmail:failure", task.getException());
                             Toast.makeText(MainActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                             Toast.makeText(MainActivity.this, "Ex: " + task.getException(), Toast.LENGTH_SHORT).show();
-                            //updateUI(null);
                         }
-                        // ...
                     }
                 });
     }
 
-    private void loginAccount(String email, String password){
-        mAuth.signInWithEmailAndPassword(email, password)
+    private void loginAccount(Account account){
+        mAuth.signInWithEmailAndPassword(account.getEmail(), account.getPassword())
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
                             Log.d("LOGIN", "signInWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            //updateUI(user);
                             iniciarExhibicion();
                         } else {
-                            // If sign in fails, display a message to the user.
                             Log.w("LOGIN", "signInWithEmail:failure", task.getException());
                             Toast.makeText(MainActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-                           // updateUI(null);
                         }
-
-                        // ...
                     }
                 });
     }
@@ -181,18 +149,13 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
                             Log.d("HANDLEFB", "signInWithCredential:success");
                             iniciarExhibicion();
                         } else {
-                            // If sign in fails, display a message to the user.
                             Log.w("HANDLEFB", "signInWithCredential:failure", task.getException());
                             Toast.makeText(MainActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-                            //updateUI(null);
                         }
-
-                        // ...
                     }
                 });
     }
